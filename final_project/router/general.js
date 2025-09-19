@@ -23,37 +23,34 @@ public_users.post("/register", (req, res) => {
 });
 
 // Get the book list available in the shop
-public_users.get("/", function (req, res) {
-    //Write your code here
-    return res.send(JSON.stringify(books, null, 4));
+public_users.get("/", async function (req, res) {
+    const booksData = await new Promise((resolve) => resolve(books));
+    return res.send(JSON.stringify(booksData, null, 4));
 });
 
 // Get book details based on ISBN
-public_users.get("/isbn/:isbn", function (req, res) {
-    return res.send(JSON.stringify(books[req.params.isbn], null, 4));
+public_users.get("/isbn/:isbn", async function (req, res) {
+    const book = await new Promise((resolve) => resolve(books[req.params.isbn]));
+
+    return res.send(JSON.stringify(book, null, 4));
 });
 
 // Get book details based on author
-public_users.get("/author/:author", function (req, res) {
-    return res.send(
-        JSON.stringify(
-            Object.values(books).filter((book) => book.author === req.params.author),
-            null,
-            4,
-        ),
+public_users.get("/author/:author", async function (req, res) {
+    const book = await new Promise((resolve) =>
+        resolve(Object.values(books).filter((book) => book.author === req.params.author)),
     );
+
+    return res.send(JSON.stringify(book, null, 4));
 });
 
 // Get all books based on title
-public_users.get("/title/:title", function (req, res) {
-    //Write your code here
-    return res.send(
-        JSON.stringify(
-            Object.values(books).filter((book) => book.title === req.params.title),
-            null,
-            4,
-        ),
+public_users.get("/title/:title", async function (req, res) {
+    const book = await new Promise((resolve) =>
+        resolve(Object.values(books).filter((book) => book.title === req.params.title)),
     );
+
+    return res.send(JSON.stringify(book, null, 4));
 });
 
 //  Get book review
